@@ -7,8 +7,12 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 QUOTES = ["Stay hungry.", "Just keep swimming.", "Carpe diem."]
 
-async def any_text(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Echo: " + update.message.text)
+async def quote_handler(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    if update.message.web_app_data and update.message.web_app_data.data == "quote":
+        await update.message.reply_text(random.choice(QUOTES))
+
+app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, quote_handler))
+
 
 app = ApplicationBuilder().token(os.getenv("BOT_TOKEN")).build()
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, any_text))
