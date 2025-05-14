@@ -4,6 +4,8 @@ from telegram import Update
 from telegram.ext import (
     ApplicationBuilder, MessageHandler, ContextTypes, filters
 )
+import logging
+logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
@@ -20,7 +22,9 @@ app = ApplicationBuilder().token(os.getenv("BOT_TOKEN")).build()
 # 2️⃣  Define handlers ---------------------------------------------
 
 async def quote_handler(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
-    if update.message.web_app_data and update.message.web_app_data.data == "quote":
+    print("QUOTE TRIGGERED >>>", update.message.web_app_data)
+    if (update.message.web_app_data 
+        and update.message.web_app_data.data == "quote"):
         await update.message.reply_text(random.choice(QUOTES))
 
 async def echo_text(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
